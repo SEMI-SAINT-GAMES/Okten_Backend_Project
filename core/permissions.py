@@ -15,6 +15,14 @@ class IsAuthenticatedOrWriteOnly(BasePermission):
             return True
         return bool(request.user)
 
-class IsCustomer(BasePermission):
+class IsSeller(BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_customer)
+        return bool(request.user and request.user.is_seller)
+class IsPremium(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_premium)
+
+class CanMakeRequest(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user.requests_count < 1 or request.user.is_premium)
+
