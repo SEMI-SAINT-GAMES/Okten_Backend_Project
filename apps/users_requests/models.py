@@ -2,6 +2,7 @@ from django.db import models
 
 from apps.users.models import UserModel
 from core.enums.regex_enum import RegEx
+from core.enums.regions_enum import REGIONS
 from core.models import BaseModel
 from django.core import validators as V
 import datetime
@@ -30,7 +31,7 @@ class PartRequestModel(BaseModel):
     engine_volume = models.FloatField(validators=[V.MinValueValidator(0.2), V.MaxValueValidator(10.0)])
     drive_unit = models.CharField(max_length=30, blank=True)
     body_type = models.CharField(max_length=20, blank=True)
-    region_of_car = models.CharField(max_length=20, blank=True)
+    region_of_car = models.CharField(max_length=20, choices=REGIONS)
     vin = models.CharField(max_length=20, blank=True, validators=[V.RegexValidator(RegEx.VIN.__str__(), RegEx.VIN.error_message())])
     about = models.CharField(max_length=10000, blank=True)
     price = models.IntegerField(validators=[V.MinValueValidator(100)])

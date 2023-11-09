@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from core.permissions import IsStaff, CanMakeRequest, IsPremium
+from core.services.cars_models_service import get_models
 from .models import PartRequestModel
 from .serializers import PartRequestSerializer
 from rest_framework.pagination import PageNumberPagination
@@ -26,10 +27,14 @@ class ListAveragePrice(GenericAPIView):
      def get(self, request, *args, **kwargs):
           brand = request.GET.get('brand')
           model = request.GET.get('model')
+          region = request.GET.get('region')
+
           if brand and model:
                try:
-                    average_price = PartRequestModel.objects.filter(car_brand=brand, car_model=model).aggregate(avg_price=Avg('price'))
-                    #if (average_price):
+                    if not region:
+                         average_price = PartRequestModel.objects.filter(car_brand=brand, car_model=model).aggregate(avg_price=Avg('price'))
+                    else:
+                         average_price = PartRequestModel.objects.filter(car_brand=brand, car_model=model, region_of_car=region).aggregate(avg_price=Avg('price'))
                     return Response({"average_price" : int(average_price['avg_price'])}, status.HTTP_200_OK )
                except Exception as err:
                     return Response({"details" : "Incorrect params"}, status.HTTP_400_BAD_REQUEST)
@@ -64,7 +69,7 @@ class RequestRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
           instance = self.get_object()
           instance.view_count += 1
           instance.save(3)
-
+          get_models()
           serializer = self.get_serializer(instance)
           return Response(serializer.data, status=status.HTTP_200_OK)
 
