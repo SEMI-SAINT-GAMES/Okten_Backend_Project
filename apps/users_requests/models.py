@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from apps.users.models import UserModel
+from core.enums.bad_words import BAD_WORDS
 from core.enums.cars_enum import CAR_BRANDS, CAR_BODY_TYPES
 from core.enums.regex_enum import RegEx
 from core.enums.regions_enum import REGIONS
@@ -8,8 +9,8 @@ from core.models import BaseModel
 from django.core import validators as V
 import datetime
 
-#from core.services.upload_avatar import upload_avatar_for_cars
-
+class ProfanityError(Exception):
+    pass
 class CurrencyModel(BaseModel):
     class Meta:
         db_table = 'currency'
@@ -38,12 +39,14 @@ class PartRequestModel(BaseModel):
     price = models.IntegerField(validators=[V.MinValueValidator(100)])
     currency = models.CharField(max_length=3, choices=(("uah", "UAH"), ("usd","USD"), ("eur", "EUR")), blank=False, null=False)
     view_count = models.IntegerField(default=0)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    user_attempts = models.IntegerField(default=3)
     this_user_name = models.CharField(max_length=100, default=None, null=True)
     this_user_phone = models.CharField(max_length=100, blank=True)
     this_user_email = models.CharField(max_length=100, default=None, null=True)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='part_requests', null=True, default=None)
     def save(self, *args, **kwargs):
+
         if not args:
             if self.currency == 'usd':
                 usd_rate = CurrencyModel.objects.get(fromCur="USD").sale
@@ -54,7 +57,10 @@ class PartRequestModel(BaseModel):
 
         super().save(**kwargs)
 
+
     def clean(self):
+
+
         valid_brands = dict(CAR_BRANDS).keys()
         valid_body_types = dict(CAR_BODY_TYPES).keys()
 
@@ -63,4 +69,8 @@ class PartRequestModel(BaseModel):
 
         if self.body_type not in valid_body_types:
             raise ValidationError(f'Неправильний тип кузова автомобіля. Виберіть з: {", ".join(valid_body_types)}')
+
+        print(pf.is_clean(r))
+
+
     #avatar = models.ImageField(upload_to=upload_avatar_for_cars, blank=True)

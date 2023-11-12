@@ -3,6 +3,7 @@ from rest_framework.generics import GenericAPIView, ListCreateAPIView, DestroyAP
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from core.enums.bad_words import BAD_WORDS
 from core.permissions import IsStaff, CanMakeRequest, IsPremium
 from core.services.cars_models_service import get_models
 from .models import PartRequestModel
@@ -11,6 +12,8 @@ from rest_framework.pagination import PageNumberPagination
 from core.pagination import PagePagination
 from ..users.serializers import UserSerializer
 from django.db.models import Avg
+from profanityfilter import ProfanityFilter
+pf:ProfanityFilter = ProfanityFilter(extra_censor_list=BAD_WORDS)
 
 
 
@@ -43,10 +46,15 @@ class ListAveragePrice(GenericAPIView):
 
 class CreatePartRequestView(GenericAPIView):
      permission_classes = (IsAuthenticated, CanMakeRequest,)
+
      def post(self, *args, **kwargs):
           data = self.request.data
+          r = data["about"]
           serializer = PartRequestSerializer(data=data)
           serializer.is_valid(raise_exception=True)
+          if not pf.is_clean(r):
+               return Response({"details":"bad words"})
+
           if self.request.user.is_authenticated:
                user = self.request.user
                user.requests_count += 1

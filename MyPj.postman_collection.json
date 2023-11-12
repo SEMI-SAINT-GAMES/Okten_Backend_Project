@@ -1,0 +1,497 @@
+{
+	"info": {
+		"_postman_id": "4e2fbfd8-cc17-4c37-b5d9-b07226ed843e",
+		"name": "MyPj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29649349"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "get all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/all",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "add user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"ad@gmail.com\",\n    \"password\": \"Thebestgirl1997;\",\n    \"profile\":{\n        \"name\": \"Andrii\",\n        \"surname\": \"Tsiluiko\"\n        // \"age\": 12\n        }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add avatar",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "user edit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/users/3/unblock",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"3",
+								"unblock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "password",
+									"value": "FuckTheWorld11;",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "margosechka@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth/recovery/request",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"recovery",
+								"request"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"pm.environment.set(\"access\", res.access)",
+									"pm.environment.set(\"refresh\", res.refresh)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "suka@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "SukaSuka;0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "glg@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "sos567890",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"pm.environment.set(\"accessAdmin\", res.access);",
+									"pm.environment.set(\"refreshAdmin\", res.refresh);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "11111111",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/auth",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "emails",
+			"item": [
+				{
+					"name": "test_email",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "requests",
+			"item": [
+				{
+					"name": "add request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "car_brand",
+									"value": "Ford",
+									"type": "text"
+								},
+								{
+									"key": "car_model",
+									"value": "73",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "12345678901234567",
+									"type": "text"
+								},
+								{
+									"key": "about",
+									"value": "Good",
+									"type": "text"
+								},
+								{
+									"key": "engine_volume",
+									"value": "3.8",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2003",
+									"type": "text"
+								},
+								{
+									"key": "region_of_car",
+									"value": "kh",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "200",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "usd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/requests/create?cur=uah",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"create"
+							],
+							"query": [
+								{
+									"key": "car_brand",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "car_model",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "part_name",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "vin",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "oem",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "about",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "cur",
+									"value": "uah"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "all in usd",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/requests?cur=usd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests"
+							],
+							"query": [
+								{
+									"key": "cur",
+									"value": "usd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "averagePrice",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/requests/average_price?brand=ford",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"average_price"
+							],
+							"query": [
+								{
+									"key": "brand",
+									"value": "ford"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "getcars",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
