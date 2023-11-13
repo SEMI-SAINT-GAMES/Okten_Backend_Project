@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4e2fbfd8-cc17-4c37-b5d9-b07226ed843e",
-		"name": "MyPj",
+		"name": "Okten_Bacjend_Proj",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29649349"
 	},
@@ -10,7 +10,200 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "get all users",
+					"name": "user Edit",
+					"item": [
+						{
+							"name": "user to admin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessAdmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/3/unblock",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"3",
+										"unblock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin to user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessAdmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/3/unblock",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"3",
+										"unblock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user block",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessAdmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/3/block",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"3",
+										"block"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user unblock",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessAdmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/3/block",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"3",
+										"block"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Premium",
+					"item": [
+						{
+							"name": "get Premium for mounth",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/2/get_premium_on_mounth",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"2",
+										"get_premium_on_mounth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get Premium for year",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{accessAdmin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/5/get_premium_on_year",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"5",
+										"get_premium_on_year"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Break premium",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users/2/get_premium_on_mounth",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users",
+										"2",
+										"get_premium_on_mounth"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get all users except me",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -59,13 +252,13 @@
 					"response": []
 				},
 				{
-					"name": "add user",
+					"name": "register",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"ad@gmail.com\",\n    \"password\": \"Thebestgirl1997;\",\n    \"profile\":{\n        \"name\": \"Andrii\",\n        \"surname\": \"Tsiluiko\"\n        // \"age\": 12\n        }\n}",
+							"raw": "{\n    \"email\": \"user@gmail.com\",\n    \"password\": \"P@ssWord1;\",\n    \"phone\": \"+380957666111\",\n    \"profile\":{\n        \"name\": \"Some\",\n        \"surname\": \"User\"\n        }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,7 +278,7 @@
 					"response": []
 				},
 				{
-					"name": "add avatar",
+					"name": "activate user",
 					"request": {
 						"method": "GET",
 						"header": []
@@ -93,31 +286,10 @@
 					"response": []
 				},
 				{
-					"name": "user edit",
+					"name": "add avatar for user",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{accessAdmin}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "{{host}}/users/3/unblock",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"users",
-								"3",
-								"unblock"
-							]
-						}
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				},
@@ -262,32 +434,11 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "refresh",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
 				}
 			]
 		},
 		{
-			"name": "emails",
-			"item": [
-				{
-					"name": "test_email",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "requests",
+			"name": "requests(advertisements)",
 			"item": [
 				{
 					"name": "add request",
@@ -409,15 +560,48 @@
 					"response": []
 				},
 				{
-					"name": "all",
+					"name": "get all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": []
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "price",
+									"value": "30000",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/requests/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"3"
+							]
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "all in usd",
+					"name": "get all in currencies",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -465,7 +649,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/requests/average_price?brand=ford",
+							"raw": "{{host}}/requests/average_price?model=1&brand=Audi&fuel&year&eng_vol",
 							"host": [
 								"{{host}}"
 							],
@@ -475,23 +659,75 @@
 							],
 							"query": [
 								{
+									"key": "model",
+									"value": "1"
+								},
+								{
+									"key": "region",
+									"value": "Харківська",
+									"disabled": true
+								},
+								{
 									"key": "brand",
-									"value": "ford"
+									"value": "Audi"
+								},
+								{
+									"key": "fuel",
+									"value": null
+								},
+								{
+									"key": "year",
+									"value": null
+								},
+								{
+									"key": "eng_vol",
+									"value": null
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add photo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/Users/vadsh/Desktop/figure-downloading-the-cocoapods-logo.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/requests/add_photo/97",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"add_photo",
+								"97"
 							]
 						}
 					},
 					"response": []
 				}
 			]
-		},
-		{
-			"name": "getcars",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
 		}
 	]
 }

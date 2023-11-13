@@ -1,6 +1,14 @@
 from django.urls import path
-from .views import UserCreateView, GetUsersView, UserAddAvatarView, MakeUserAdminView, MakeAdminUserView, UserBlockView, \
-    UserUnblockView
+from .views import (UserCreateView,
+                    GetUsersView,
+                    UserAddAvatarView,
+                    MakeUserAdminView,
+                    MakeAdminUserView,
+                    UserBlockView,
+                    UserUnblockView,
+                    UserGetPremiumMounth,
+                    UserGetPremiumYear,
+                    UserBreakPremiumView)
 
 urlpatterns = [
     path('', UserCreateView.as_view(), name='users_create'),
@@ -9,5 +17,8 @@ urlpatterns = [
     path('/<int:pk>/user_to_admin', MakeUserAdminView.as_view()),
     path('/<int:pk>/admin_to_user', MakeAdminUserView.as_view()),
     path('/<int:pk>/block', UserBlockView.as_view()),
-    path('/<int:pk>/unblock', UserUnblockView.as_view())
+    path('/<int:pk>/unblock', UserUnblockView.as_view()),
+    path('/<int:pk>/get_premium_on_mounth', UserGetPremiumMounth.as_view()),
+    path('/<int:pk>/get_premium_on_year', UserGetPremiumYear.as_view()),
+    path('/<int:pk>/break_premium', UserBreakPremiumView.as_view())
 ]

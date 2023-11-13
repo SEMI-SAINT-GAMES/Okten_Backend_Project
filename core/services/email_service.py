@@ -15,9 +15,9 @@ class EmailService:
         msg = EmailMultiAlternatives(subject, from_email=os.environ.get('EMAIL_HOST_USER'), to=[to])
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
-    @classmethod
-    def test_email(cls):
-        cls.__send_email('vadik505050@gmail.com', 'test_email.html', {}, 'Hello')
+    # @classmethod
+    # def test_email(cls):
+    #     cls.__send_email('vadik505050@gmail.com', 'test_email.html', {}, 'Hello')
     @classmethod
     def register_email(cls, user:UserDataClass):
         token = JWTService.create_token(user, ActivateToken)

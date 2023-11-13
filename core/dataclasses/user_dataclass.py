@@ -17,6 +17,7 @@ class UserDataClass:
     is_active:bool
     is_staff:bool
     is_superuser:bool
+    premium_till:datetime
     created_at:datetime
     updated_at: datetime
     profile:ProfileDataClass

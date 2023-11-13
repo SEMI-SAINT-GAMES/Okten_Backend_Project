@@ -26,7 +26,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin, BaseModel):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_seller = models.BooleanField(default=False)
-    is_premium = models.BooleanField(default=False)
+    premium_till = models.DateTimeField(null=True, default=None)
     requests_count = models.IntegerField(default=0)
     profile = models.OneToOneField(ProfileModel, on_delete=models.CASCADE, related_name='user', null=True)
 

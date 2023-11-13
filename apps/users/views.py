@@ -1,11 +1,16 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, ListAPIView, GenericAPIView, UpdateAPIView
+from rest_framework.generics import (CreateAPIView,
+                                     ListAPIView,
+                                     GenericAPIView,
+                                     UpdateAPIView)
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from apps.users.models import UserModel
 from apps.users.serializers import UserSerializer, ProfileAvatarSerializer
 from core.dataclasses.user_dataclass import UserDataClass
-from core.permissions import IsAuthenticatedOrWriteOnly, IsSuperUser
+from core.permissions import IsSuperUser
+from datetime import timedelta
+from django.utils import timezone
 
 
 class UserCreateView(CreateAPIView):
@@ -76,5 +81,51 @@ class UserBlockView(GenericAPIView):
         if user.is_active:
             user.is_active = False
             user.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+class UserGetPremiumMounth(GenericAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = (IsSuperUser,)
+
+    def patch(self, *args, **kwargs):
+        user: UserDataClass = self.get_object()
+        current_time = timezone.now()
+        time_till = current_time + timedelta(days=30)
+        if not user.premium_till or current_time > user.premium_till:
+            user.premium_till = time_till
+            user.save()
+        else:
+            return Response({"details":"This user is already premium"})
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
+class UserGetPremiumYear(GenericAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = (IsSuperUser,)
+
+    def patch(self, *args, **kwargs):
+        user: UserDataClass = self.get_object()
+        current_time = timezone.now()
+        time_till = current_time + timedelta(days=365)
+        if not user.premium_till or current_time > user.premium_till:
+            user.premium_till = time_till
+            user.save()
+        else:
+            return Response({"details":"This user is already premium"})
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+class UserBreakPremiumView(GenericAPIView):
+    queryset = UserModel.objects.all()
+    permission_classes = (IsSuperUser,)
+
+    def patch(self, *args, **kwargs):
+        user: UserDataClass = self.get_object()
+        current_time = timezone.now()
+        if user.premium_till and current_time < user.premium_till:
+            user.premium_till = None
+            user.save()
+        else:
+            return Response({"details":"This user is not premium"})
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
