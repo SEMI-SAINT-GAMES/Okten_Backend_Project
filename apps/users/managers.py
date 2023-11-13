@@ -16,7 +16,6 @@ class UserManager(BaseUserManager):
         extra_kwargs.setdefault('is_superuser', True)
         extra_kwargs.setdefault('is_active', True)
         extra_kwargs.setdefault('is_seller', True)
-        extra_kwargs.setdefault('is_premium', True)
 
         if not extra_kwargs['is_staff']:
             raise ValueError('is_staff requirement for superuser')

@@ -433,7 +433,43 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "login admin",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "admin@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "11111111",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{host}}/auth",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
 				}
 			]
 		},
@@ -553,6 +589,237 @@
 								{
 									"key": "cur",
 									"value": "uah"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "car_brand",
+									"value": "Ford",
+									"type": "text"
+								},
+								{
+									"key": "car_model",
+									"value": "73",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "12345678901234567",
+									"type": "text"
+								},
+								{
+									"key": "about",
+									"value": "Good",
+									"type": "text"
+								},
+								{
+									"key": "engine_volume",
+									"value": "3.8",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2003",
+									"type": "text"
+								},
+								{
+									"key": "region_of_car",
+									"value": "kh",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "200",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "usd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/requests/update/3",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"update",
+								"3"
+							],
+							"query": [
+								{
+									"key": "car_brand",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "car_model",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "part_name",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "vin",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "oem",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "about",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessAdmin}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "car_brand",
+									"value": "Ford",
+									"type": "text"
+								},
+								{
+									"key": "car_model",
+									"value": "73",
+									"type": "text"
+								},
+								{
+									"key": "vin",
+									"value": "12345678901234567",
+									"type": "text"
+								},
+								{
+									"key": "about",
+									"value": "Good",
+									"type": "text"
+								},
+								{
+									"key": "engine_volume",
+									"value": "3.8",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2003",
+									"type": "text"
+								},
+								{
+									"key": "region_of_car",
+									"value": "kh",
+									"type": "text"
+								},
+								{
+									"key": "user",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "200",
+									"type": "text"
+								},
+								{
+									"key": "currency",
+									"value": "usd",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/requests/activate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"requests",
+								"activate"
+							],
+							"query": [
+								{
+									"key": "car_brand",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "car_model",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "part_name",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "vin",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "oem",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "about",
+									"value": null,
+									"disabled": true
 								}
 							]
 						}

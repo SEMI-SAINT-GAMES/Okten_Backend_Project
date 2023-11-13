@@ -38,3 +38,12 @@ class EmailService:
             {'name': user.profile.name, 'url': url},
             'Password Recovery'
         )
+
+    @classmethod
+    def validate(cls, id):
+        cls.__send_email(
+            "your_email@gmail.com",
+            'validate.html',
+            {'name': "Dear admin", 'id': id},
+            'Validate Notice'
+        )

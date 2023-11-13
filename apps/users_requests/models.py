@@ -39,6 +39,7 @@ class PartRequestModel(BaseModel):
     price = models.IntegerField(validators=[V.MinValueValidator(100)])
     currency = models.CharField(max_length=3, choices=(("uah", "UAH"), ("usd","USD"), ("eur", "EUR")), blank=False, null=False)
     view_count = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=upload_photo_for_request, blank=True)
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='part_requests', null=True, default=None)
     def save(self, *args, **kwargs):
@@ -55,7 +56,14 @@ class PartRequestModel(BaseModel):
 
 
 
+class CheckModel(BaseModel):
+    class Meta:
+        db_table = 'check_valid'
+    checker = models.IntegerField()
+    notice = models.ForeignKey(PartRequestModel, on_delete=models.CASCADE)
 
 
 
-    #avatar = models.ImageField(upload_to=upload_avatar_for_cars, blank=True)
+
+
+

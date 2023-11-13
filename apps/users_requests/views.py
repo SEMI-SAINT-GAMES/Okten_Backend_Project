@@ -1,18 +1,18 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from core.enums.bad_words import BAD_WORDS
 from core.permissions import IsStaff, CanMakeRequest, IsPremium
-from .models import PartRequestModel
+from .models import PartRequestModel, CheckModel
 from .serializers import PartRequestSerializer, RequestPhotoSerializer
 from core.pagination import PagePagination
 from django.db.models import Avg
 from profanityfilter import ProfanityFilter
 from django.shortcuts import get_object_or_404
-
+from core.services.currency_service import update_currency_rates
 from ..users.models import UserModel
-
+from core.services.email_service import EmailService
 pf:ProfanityFilter = ProfanityFilter(extra_censor_list=BAD_WORDS)
 
 
@@ -52,24 +52,56 @@ class ListAveragePrice(GenericAPIView):
           else:
                return Response("No params", status.HTTP_400_BAD_REQUEST)
 
-class CreatePartRequestView(GenericAPIView):
+class CreatePartRequestView(CreateAPIView):
      permission_classes = (IsAuthenticated, CanMakeRequest,)
+     serializer_class = PartRequestSerializer
+     update_currency_rates()
+
+
+class UpdatePartRequestView(UpdateAPIView):
+     permission_classes = (IsAuthenticated, CanMakeRequest,)
+     serializer_class = PartRequestSerializer
+     queryset = PartRequestModel.objects.all()
+     update_currency_rates()
+     
+
+     def patch(self, request, *args, **kwargs):
+          notice = self.get_object()
+          notice.is_active = False
+          notice.save()
+          return super().patch(request, *args, **kwargs)
+
+
+
+
+class ActivatePartRequestView(GenericAPIView): #id notice
+     serializer_class = PartRequestSerializer
+     queryset = PartRequestModel.objects.exclude(is_active=True)
 
      def post(self, *args, **kwargs):
-          data = self.request.data
-          r = data["about"]
-          serializer = PartRequestSerializer(data=data)
-          serializer.is_valid(raise_exception=True)
-          if not pf.is_clean(r):
-               return Response({"details":"bad words"})
+          notice = self.get_object()
+          check = CheckModel.objects.filter(notice=notice).first()
+          validate = pf.is_clean(notice.about)
 
-          if self.request.user.is_authenticated:
-               user = self.request.user
-               user.requests_count += 1
-               user.save()
-               serializer.save(user=user)
+          if  validate:
+               notice.is_active = True
+               notice.save()
+               return Response(PartRequestSerializer(notice).data, status=status.HTTP_200_OK)
+     
+          if check and check.checker:
+               count = check.checker +1
+          
+               if check.checker < 3:
+                    setattr(check, "checker", count)
+                    check.save()
+                    print('now')
+               else:
+                    EmailService.validate(id=notice.id)
+                    return Response({"detail": f"email send"}, status=status.HTTP_200_OK)
+          else:
+               check = CheckModel.objects.create(notice=notice, checker=1)
+          return Response({"detail": f"your fields about not valid try {check.checker}"}, status=status.HTTP_400_BAD_REQUEST)
 
-          return Response(serializer.data, status.HTTP_200_OK)
 
 class RequestRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
      permission_classes = (AllowAny,)
