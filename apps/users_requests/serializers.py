@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import PartRequestModel, CurrencyModel
-from core.services.currency_service import fetch_currency_data, update_currency_rates
+from .models import PartRequestModel
+from core.services.currency_service import fetch_currency_data
 from django.utils import timezone
 
 class RequestPhotoSerializer(serializers.ModelSerializer):
@@ -37,15 +37,15 @@ class PartRequestSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get("request")
+        currencies = fetch_currency_data()
         if request and request.method == 'GET':
             currency = self.context['request'].GET.get('cur')
-            update_currency_rates()
             if currency == 'usd':
-                usd_rate = CurrencyModel.objects.get(fromCur="USD").sale
-                data['price'] = int(instance.price / usd_rate)
+                usd_rate = currencies[1]['sale']
+                data['price'] = int(instance.price / float(usd_rate))
             elif currency == 'eur':
-                eur_rate = CurrencyModel.objects.get(fromCur="EUR").sale
-                data['price'] = int(instance.price / eur_rate)
+                eur_rate = currencies[0]['sale']
+                data['price'] = int(instance.price / float(eur_rate))
             if request:
                 if not request.user.premium_till or request.user.premium_till < timezone.now():
                     data["view_count"] = "Get premium to see statistics"

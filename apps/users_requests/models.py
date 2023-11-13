@@ -8,18 +8,8 @@ from core.enums.regions_enum import REGIONS
 from core.models import BaseModel
 from django.core import validators as V
 import datetime
-
+from core.services.currency_service import fetch_currency_data
 from core.services.upload_avatar import upload_photo_for_request
-
-
-class CurrencyModel(BaseModel):
-    class Meta:
-        db_table = 'currency'
-
-    toCur = models.CharField(max_length=30)
-    fromCur = models.CharField(max_length=30)
-    buy = models.FloatField()
-    sale = models.FloatField()
 
 class PartRequestModel(BaseModel):
     class Meta:
@@ -36,21 +26,21 @@ class PartRequestModel(BaseModel):
     region_of_car = models.CharField(max_length=20, choices=REGIONS)
     vin = models.CharField(max_length=20, blank=True, validators=[V.RegexValidator(RegEx.VIN.__str__(), RegEx.VIN.error_message())])
     about = models.CharField(max_length=10000)
-    price = models.IntegerField(validators=[V.MinValueValidator(100)])
+    price = models.FloatField(validators=[V.MinValueValidator(100.0)])
     currency = models.CharField(max_length=3, choices=(("uah", "UAH"), ("usd","USD"), ("eur", "EUR")), blank=False, null=False)
     view_count = models.IntegerField(default=0)
     is_active = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=upload_photo_for_request, blank=True)
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='part_requests', null=True, default=None)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='part_requests')
     def save(self, *args, **kwargs):
-
+        currencies = fetch_currency_data()
         if not args:
             if self.currency == 'usd':
-                usd_rate = CurrencyModel.objects.get(fromCur="USD").sale
-                self.price *= usd_rate
+                usd_rate = currencies[1]['sale']
+                self.price *= float(usd_rate)
             elif self.currency == 'eur':
-                eur_rate = CurrencyModel.objects.get(fromCur="EUR").sale
-                self.price *= eur_rate
+                eur_rate = currencies[0]['sale']
+                self.price *= float(eur_rate)
 
         super().save(**kwargs)
 

@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView, ListAPIView, UpdateAPIView, CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
+from core.dataclasses import user_dataclass
 from core.enums.bad_words import BAD_WORDS
 from core.permissions import IsStaff, CanMakeRequest, IsPremium
 from .models import PartRequestModel, CheckModel
@@ -10,7 +12,6 @@ from core.pagination import PagePagination
 from django.db.models import Avg
 from profanityfilter import ProfanityFilter
 from django.shortcuts import get_object_or_404
-from core.services.currency_service import update_currency_rates
 from ..users.models import UserModel
 from core.services.email_service import EmailService
 pf:ProfanityFilter = ProfanityFilter(extra_censor_list=BAD_WORDS)
@@ -55,14 +56,19 @@ class ListAveragePrice(GenericAPIView):
 class CreatePartRequestView(CreateAPIView):
      permission_classes = (IsAuthenticated, CanMakeRequest,)
      serializer_class = PartRequestSerializer
-     update_currency_rates()
+     def perform_create(self, serializer):
+          user= self.request.user
+          user.requests_count += 1
+          user.save()
+          serializer.save(user=user)
+
 
 
 class UpdatePartRequestView(UpdateAPIView):
      permission_classes = (IsAuthenticated, CanMakeRequest,)
      serializer_class = PartRequestSerializer
      queryset = PartRequestModel.objects.all()
-     update_currency_rates()
+
      
 
      def patch(self, request, *args, **kwargs):
